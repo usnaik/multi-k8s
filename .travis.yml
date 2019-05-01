@@ -1,0 +1,15 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t upen/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -t upen/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t upen/multi-client ./client
+  - docker build -t upen/multi-nginx ./nginx
+  - docker build -t upen/multi-server ./server
+  - docker build -t upen/multi-worker ./worker
