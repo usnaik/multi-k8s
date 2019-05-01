@@ -3,13 +3,20 @@ services:
   - docker
 
 before_install:
-  - docker build -t upen/react-test -f ./client/Dockerfile.dev ./client
+  - docker build -t upendranaik/react-test -f ./client/Dockerfile.dev ./client
 
 script:
-  - docker run -t upen/react-test npm test -- --coverage
+  - docker run -t upendranaik/react-test npm test -- --coverage
 
 after_success:
-  - docker build -t upen/multi-client ./client
-  - docker build -t upen/multi-nginx ./nginx
-  - docker build -t upen/multi-server ./server
-  - docker build -t upen/multi-worker ./worker
+  - docker build -t upendranaik/multi-client ./client
+  - docker build -t upendranaik/multi-nginx ./nginx
+  - docker build -t upendranaik/multi-server ./server
+  - docker build -t upendranaik/multi-worker ./worker
+  # Log in to Docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Take those images and push them to Docker Repository
+  - docker push upendranaik/multi-client
+  - docker push upendranaik/multi-nginx
+  - docker push upendranaik/multi-server
+  - docker push upendranaik/multi-worker
