@@ -6,21 +6,21 @@
             "image": "upendranaik/multi-client",
             "hostname": "client",
             "essential": false,
-            "memory": 128
+            "memory": 256
         },
         {
             "name": "server",
             "image": "upendranaik/multi-server",
             "hostname": "api",
             "essential": false,
-            "memory": 128
+            "memory": 256
         },
         {
             "name": "worker",
             "image": "upendranaik/multi-worker",
             "hostname": "worker",
             "essential": false,
-            "memory": 128
+            "memory": 256
         },
         {
             "name": "nginx",
@@ -37,7 +37,7 @@
                 "client",
                 "server"
             ],
-            "memory": 128
+            "memory": 256
         }
     ]
 }
