@@ -13,13 +13,13 @@ after_success:
   - docker build -t upendranaik/multi-nginx ./nginx
   - docker build -t upendranaik/multi-server ./server
   - docker build -t upendranaik/multi-worker ./worker
-#   # Log in to Docker CLI
-#   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
-#   # Take those images and push them to Docker Repository
-#   - docker push upendranaik/multi-client
-#   - docker push upendranaik/multi-nginx
-#   - docker push upendranaik/multi-server
-#   - docker push upendranaik/multi-worker
+  # Log in to Docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Take those images and push them to Docker Repository
+  - docker push upendranaik/multi-client
+  - docker push upendranaik/multi-nginx
+  - docker push upendranaik/multi-server
+  - docker push upendranaik/multi-worker
 
 # deploy:
 #   provider: elasticbeanstalk
