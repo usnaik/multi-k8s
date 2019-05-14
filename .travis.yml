@@ -1,35 +1,11 @@
 sudo: required
 services:
   - docker
-
 before_install:
-  - docker build -t upendranaik/react-test -f ./client/Dockerfile.dev ./client
-
-script:
-  - docker run -t upendranaik/react-test npm test -- --coverage
-
-after_success:
-  - docker build -t upendranaik/multi-client ./client
-  - docker build -t upendranaik/multi-nginx ./nginx
-  - docker build -t upendranaik/multi-server ./server
-  - docker build -t upendranaik/multi-worker ./worker
-  # Log in to Docker CLI
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
-  # Take those images and push them to Docker Repository
-  - docker push upendranaik/multi-client
-  - docker push upendranaik/multi-nginx
-  - docker push upendranaik/multi-server
-  - docker push upendranaik/multi-worker
-
-# deploy:
-#   provider: elasticbeanstalk
-#   region: ap-south-1
-#   app: multi-docker
-#   env: MultiDocker-env
-#   bucket_name: elasticbeanstalk-ap-south-1-739281398580
-#   bucket_path: multi-docker
-#   on:
-#     branch: master
-#   access_key_id: $AWS_ACCESS_KEY
-#   secret_access_key:
-#     secure: $AWS_SECRET_KEY
+  - openssl aes-256-cbc -K $encrypted_0c35eebf403c_key -iv $encrypted_0c35eebf403c_iv -in service-account.json.enc -out service-account.json -d
+  - curl https://sdk.cloud.google.com | bash > /dev/null;
+  - source $HOME/google-cloud-sdk/path.bash.inc
+  - gcloud components update kubectl
+  - gcloud auth activate-service-account --key-file service-account.json 
+ 
+ 
