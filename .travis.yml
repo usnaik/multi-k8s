@@ -1,4 +1,5 @@
 sudo: required
+language: generic
 services:
   - docker
 env:
@@ -7,18 +8,18 @@ env:
     - CLOUDSDK_CORE_DISABLE_PROMPTS=1
 before_install:
   - openssl aes-256-cbc -K $encrypted_0c35eebf403c_key -iv $encrypted_0c35eebf403c_iv -in service-account.json.enc -out service-account.json -d
-  - curl https://sdk.cloud.google.com | bash > /dev/null;
-  - source $HOME/google-cloud-sdk/path.bash.inc
-  - gcloud components update kubectl
-  - gcloud auth activate-service-account --key-file service-account.json
-  - gcloud config set project confident-nexus-240509
-  - gcloud config set compute/zone asia-southeast1-a
-  - gcloud container clusters get-credentials standard-cluster-1
+  - curl https://sdk.cloud.google.com | bash > /dev/null; # Download and install GC SDK on instance assigned by Travis CI
+  - source $HOME/google-cloud-sdk/path.bash.inc           # Looks at SDK Directory and source shell configuration  
+  - gcloud components update kubectl                      # CLI Installs kubectl 
+  - gcloud auth activate-service-account --key-file service-account.json  # Create GCP access account for GCP-SDK on Travis (like AWS-IAM Account)
+  - gcloud config set project confident-nexus-240509      # Set the GKE project ID
+  - gcloud config set compute/zone asia-southeast1-a      # Share the GCP Zone to SDK
+  - gcloud container clusters get-credentials standard-cluster-1    # Share the clusrer name
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
   - docker build -t upendranaik/react-test -f ./client/Dockerfile.dev ./client
 
 script:
-  - docker run upendranaik/react-test npm test -- --coverage
+  - docker run -e CI=true USERNAME/docker-react npm run test
 
 deploy:
   provider: script
